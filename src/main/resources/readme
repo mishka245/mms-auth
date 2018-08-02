@@ -1,0 +1,6 @@
+This project uses mysql docker container.
+To run container follow next steps:
+    1) download and install docker
+    2) docker container run --name mms-auth-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD="RickAndMorty" -d mysql:8
+    3) connect to mysql db and run mysql-script.sql file
+    4) change application.properties settings to your database setting
