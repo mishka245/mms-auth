@@ -3,15 +3,17 @@ package com.springsecurity.core.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-@Data
-public class UserLoginDTO {
+import javax.validation.constraints.NotBlank;
 
+@Data
+public class LoginDTO {
+
+    @NotBlank
     @JsonProperty("userName")
     private String userName;
 
+    @NotBlank
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("token")
-    private String token;
 }

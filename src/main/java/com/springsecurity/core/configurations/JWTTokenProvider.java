@@ -1,6 +1,5 @@
 package com.springsecurity.core.configurations;
 
-import com.springsecurity.core.dto.UserLoginDTO;
 import com.springsecurity.core.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -20,25 +19,21 @@ public class JWTTokenProvider {
 
     private String jwtSecret;
 
-    private Long tokenExpireTime;
+    private Integer tokenExpireTime;
 
     public String generateToken(User user) {
 
-        long now = System.currentTimeMillis();
-
-        Claims claims = Jwts.claims();
-        claims.setSubject(user.getUserName());
-        claims.setIssuedAt(new Date(now));
-        claims.setExpiration(new Date(now + tokenExpireTime));
-        claims.put("firstName", user.getFirstName());
-        claims.put("lastName", user.getLastName());
-        claims.put("email", user.getEmail());
-        claims.put("role", user.getRole().getRoleName());
-
+        Date now = new Date();
+        
         return Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
+            .setSubject(user.getUserName())
+            .setExpiration(new Date(now.getTime() + tokenExpireTime * 60 * 1000))
+            .claim("firstName", user.getFirstName())
+            .claim("lastName", user.getLastName())
+            .claim("email", user.getEmail())
+            .claim("role", user.getRole().getRoleName())
+            .signWith(SignatureAlgorithm.HS512, jwtSecret)
+            .compact();
     }
 
     public String getUserNameFromToken(String token) {
@@ -62,8 +57,8 @@ public class JWTTokenProvider {
     }
 
     @Value("${token.expire.time.minutes}")
-    public void setTokenExpireTime(Long tokenExpireTime) {
-        this.tokenExpireTime = tokenExpireTime * 60 * 1000;
+    public void setTokenExpireTime(Integer tokenExpireTime) {
+        this.tokenExpireTime = tokenExpireTime;
     }
 
     @Value("${token.secret}")

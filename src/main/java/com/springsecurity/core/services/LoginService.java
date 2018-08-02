@@ -2,14 +2,16 @@ package com.springsecurity.core.services;
 
 import com.springsecurity.core.configurations.JWTTokenProvider;
 import com.springsecurity.core.dto.UserDTO;
-import com.springsecurity.core.dto.UserLoginDTO;
+import com.springsecurity.core.dto.LoginDTO;
 import com.springsecurity.core.entities.User;
+import com.springsecurity.core.exceptions.UnauthorisedException;
 import com.springsecurity.core.exceptions.UserNotFoundException;
 import com.springsecurity.core.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,7 @@ public class LoginService {
     private final UserRepository userRepository;
     private final JWTTokenProvider tokenProvider;
 
+
     @Autowired
     public LoginService(UserRepository userRepository, JWTTokenProvider tokenProvider) {
         this.userRepository = userRepository;
@@ -34,17 +37,17 @@ public class LoginService {
     }
 
     @Transactional
-    public UserLoginDTO authenticate(UserLoginDTO loginDTO) {
+    public String getToken(LoginDTO loginDTO) {
         User user = Optional
                 .ofNullable(this.userRepository.findByUserName(loginDTO.getUserName()))
                 .orElseThrow(UserNotFoundException::new);
         user.setIsActive(1);
-        UserLoginDTO userDTO = new UserLoginDTO();
-        userDTO.setUserName(user.getUserName());
-        userDTO.setPassword(user.getPassword());
-        userDTO.setToken(tokenProvider.generateToken(user));
+    if (!BCrypt.checkpw(loginDTO.getPassword(), user.getPassword())) {
+            throw new UnauthorisedException();
+        }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword()));
-        return userDTO;
+
+        return tokenProvider.generateToken(user);
     }
 
     public UserDTO getUser() {
@@ -57,7 +60,6 @@ public class LoginService {
     }
 
     public boolean isAuthenticated() {
-        System.out.println(getCurrentUserName());
         return !Objects.equals(getCurrentUserName(), "anonymousUser");
     }
 

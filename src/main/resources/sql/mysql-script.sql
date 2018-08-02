@@ -23,8 +23,8 @@ create table user(
 );
 
 insert into user_role (role_id, role_name) values
-  (1, 'admin'),
-  (2, 'user');
+  (1, 'ADMIN'),
+  (2, 'USER');
 
 insert into user (user_id, first_name, last_name, user_name, password, birth_date, role_id, email, is_active) VALUES
   (1, 'John', 'Malcovich', 'admin', '$2a$10$2q2MUhRhIzaG5U5Pxt8VB.YCqYkqVLMsb9CY3ILQXa7VsTfxocHOW', '21.12.1997', 2, 'admin@test.com',0),

@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
@@ -35,12 +36,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         logger.debug("processing authentication for '{}'", request.getRequestURL());
 
-        final String requestHeader = request.getHeader("Authorisation");
+        final String authToken = request.getHeader("X-Auth-Token");
 
         String username = null;
-        String authToken = null;
-        if (requestHeader != null && requestHeader.startsWith("Token ")) {
-            authToken = requestHeader.substring(6);
+        if (Objects.nonNull(authToken)) {
             try {
                 username = tokenProvider.getUserNameFromToken(authToken);
             } catch (IllegalArgumentException e) {
@@ -54,7 +53,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         logger.debug("checking authentication for user '{}'", username);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            logger.debug("security context was null, so authorizating user");
 
             UserDetails userDetails = this.userDetailsConfig.loadUserByUsername(username);
 
@@ -65,7 +63,6 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-
         chain.doFilter(request, response);
     }
 }

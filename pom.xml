@@ -160,31 +160,31 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.0</version>
+            <!--<plugin>-->
+                <!--<groupId>com.spotify</groupId>-->
+                <!--<artifactId>dockerfile-maven-plugin</artifactId>-->
+                <!--<version>1.4.0</version>-->
 
-                <!--Uncomment this part to push image on hub-->
-                
-                <!--<configuration>-->
-                    <!--<repository>YOUR_REPO/IMAGE_NAME</repository>-->
-                    <!--<tag>1.0</tag>-->
-                    <!--<buildArgs>-->
-                        <!--<JAR_FILE>target/message-webservice-0.0.1-SNAPSHOT.jar</JAR_FILE>-->
-                    <!--</buildArgs>-->
-                <!--</configuration>-->
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <!--<goal>push</goal>-->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+                <!--&lt;!&ndash;Uncomment this part to push image on hub&ndash;&gt;-->
+                <!---->
+                <!--&lt;!&ndash;<configuration>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<repository>YOUR_REPO/IMAGE_NAME</repository>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<tag>1.0</tag>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<buildArgs>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<JAR_FILE>target/message-webservice-0.0.1-SNAPSHOT.jar</JAR_FILE>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</buildArgs>&ndash;&gt;-->
+                <!--&lt;!&ndash;</configuration>&ndash;&gt;-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>default</id>-->
+                        <!--<phase>install</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>build</goal>-->
+                            <!--&lt;!&ndash;<goal>push</goal>&ndash;&gt;-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 </project>
