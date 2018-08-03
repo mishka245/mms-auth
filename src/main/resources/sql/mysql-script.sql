@@ -1,17 +1,15 @@
-#
-
 create database mmsauth;
 
 use mmsauth;
 
 create table user_role(
   role_id int primary key,
-  role_name nvarchar(30) not null
+  role_name nvarchar(30) not null unique
 );
 
 create table user(
   user_id int primary key auto_increment,
-  user_name nvarchar(30) not null,
+  user_name nvarchar(30) not null unique,
   password nvarchar(256) not null,
   role_id int,
   email nvarchar(50) not null,

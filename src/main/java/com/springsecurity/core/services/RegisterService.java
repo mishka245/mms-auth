@@ -3,6 +3,7 @@ package com.springsecurity.core.services;
 import com.springsecurity.core.dto.UserRegisterDTO;
 import com.springsecurity.core.entities.User;
 import com.springsecurity.core.entities.UserRole;
+import com.springsecurity.core.exceptions.DuplicateUsernameException;
 import com.springsecurity.core.repositories.UserRepository;
 import com.springsecurity.core.repositories.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Objects;
 
 @Service
 @Component
@@ -34,6 +36,10 @@ public class RegisterService {
 
         UserRole role = userRoleRepository.findById(2).get();
 
+        if (Objects.nonNull(userRepository.findByUserName(userRegisterDTO.getUserName()))) {
+            throw new DuplicateUsernameException();
+        }
+
         user.setRole(role);
         user.setFirstName(userRegisterDTO.getFirstName());
         user.setLastName(userRegisterDTO.getLastName());
@@ -54,9 +60,5 @@ public class RegisterService {
         userRegisterDTO.setEmail(user.getEmail());
 
         return userRegisterDTO;
-    }
-
-    private User lastRecord() {
-        return userRepository.findFirstByOrderByUserIdDesc();
     }
 }

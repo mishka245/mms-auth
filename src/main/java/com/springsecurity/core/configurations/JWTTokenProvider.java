@@ -1,7 +1,6 @@
 package com.springsecurity.core.configurations;
 
 import com.springsecurity.core.entities.User;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -62,7 +61,7 @@ public class JWTTokenProvider {
     }
 
     @Value("${token.secret}")
-    public void setTokenExpireTime(String jwtSecret) {
+    public void setJwtSecret(String jwtSecret) {
         this.jwtSecret = jwtSecret;
     }
 

@@ -42,7 +42,7 @@ public class LoginService {
                 .ofNullable(this.userRepository.findByUserName(loginDTO.getUserName()))
                 .orElseThrow(UserNotFoundException::new);
         user.setIsActive(1);
-    if (!BCrypt.checkpw(loginDTO.getPassword(), user.getPassword())) {
+        if (!BCrypt.checkpw(loginDTO.getPassword(), user.getPassword())) {
             throw new UnauthorisedException();
         }
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUserName(), loginDTO.getPassword()));
